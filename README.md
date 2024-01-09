@@ -37,7 +37,7 @@ Represents a Clipper object that limits the range of input values.
 ### Examples
 
 ```javascript
-// clip to 0-1
+// clip to [0,1]
 const clipper = new Clipper({
  min: 0,
  max: 1,
@@ -51,7 +51,7 @@ clipper.process(-1); // 0
 ```javascript
 // min only
 const clipper = new Clipper({
-min: 0,
+  min: 0,
 });
 
 clipper.process(0.5); // 0.5
@@ -93,7 +93,7 @@ Represents an Hysteresis filter.
 ### Examples
 
 ```javascript
-// hysteresis with lowpass up and lowpass down
+// hysteresis with quick up and slow down
 const hysteresis = new Hysteresis({
  sampleRate: 2, // normalised frequency
  lowpassFrequencyUp: 0.9,
@@ -155,7 +155,6 @@ Represents a Lowpass filter.
 ### Examples
 
 ```javascript
-// lowpass with sampleRate and lowpassFrequency
 const lowpass = new Lowpass({
 sampleRate: 2, // normalised frequency
 lowpassFrequency: 0.9,
