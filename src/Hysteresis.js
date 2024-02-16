@@ -10,10 +10,10 @@ import { hertzToNormalised } from '@ircam/sc-utils';
  *  lowpassFrequencyUp: 0.9,
  *  lowpassFrequencyDown: 0.1,
  * });
- * 
+ *
  * hysteresis.process(0); // 0
  * hysteresis.process(1); // 0.9
- * hyteresis.process(1); // 0.99
+ * hysteresis.process(1); // 0.99
  * hysteresis.process(1); // 0.999
  * hysteresis.process(1); // 0.9999
  * hysteresis.process(1); // 0.99999
@@ -28,7 +28,7 @@ class Hysteresis {
 
   /**
    * Creates a new instance of the Hysteresis filter.
-   * 
+   *
    * @param {Object} [options] - The options object.
    * @param {number} [options.sampleRate=2] - The sample rate in Hertz or 2 for normalized frequency.
    * @param {number} [options.lowpassFrequencyUp=0.5] - The lowpass frequency for going up in Hertz if sampleRate is defined, or normalized.
