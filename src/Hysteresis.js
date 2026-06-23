@@ -68,7 +68,7 @@ class Hysteresis {
     inputScale = Math.max(0, Math.min(1,
       hertzToNormalised(this.lowpassFrequencyUp, {
         sampleRate: this.sampleRate,
-      }) ) );
+      })));
     feedbackScale = 1 - inputScale;
     this.up = {
       inputScale,
@@ -78,7 +78,7 @@ class Hysteresis {
     inputScale = Math.max(0, Math.min(1,
       hertzToNormalised(this.lowpassFrequencyDown, {
         sampleRate: this.sampleRate,
-      }) ) );
+      })));
     feedbackScale = 1 - inputScale;
     this.down = {
       inputScale,
@@ -96,9 +96,9 @@ class Hysteresis {
       this.outputValueLast = inputValue;
     }
 
-    const direction = (inputValue > this.outputValueLast
+    const direction = inputValue > this.outputValueLast
       ? 'up'
-      : 'down');
+      : 'down';
 
     const { inputScale, feedbackScale } = this[direction];
     // be sure to recompute feedback now with last output value

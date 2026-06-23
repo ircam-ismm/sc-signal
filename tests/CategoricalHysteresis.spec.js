@@ -62,12 +62,12 @@ describe('# CategoricalHysteresis', () => {
 
     const hysteresisReused = new CategoricalHysteresis();
 
-    it(`should properly work with reused instance (${index + 1})`, () => {
+    it (`should properly work with reused instance (${index + 1})`, () => {
       hysteresisReused.set(params);
 
       testValues.forEach(([input, expected], index) => {
         const resultReused = hysteresisReused.process(input);
-        assert.equal(resultReused, expected, `Failed reused at index ${index}`);
+        assert.equal(resultReused, expected,`Failed reused at index ${index}`);
       });
     });
   });

@@ -4,8 +4,7 @@ import { assert } from 'chai';
 import { Clipper } from '../src/Clipper.js';
 
 describe(`Check Clipper object`, () => {
-
-  const testSetups = [
+  [
     // default values: no clip
     [
       {},
@@ -53,35 +52,25 @@ describe(`Check Clipper object`, () => {
         [Infinity, 21],
       ],
     ],
-  ];
+  ].forEach(([params, testValues], index) => {
+    it(`should properly work with new instance (${index + 1})`, () => {
+      const clipper = new Clipper(params);
 
-  it(`should validate values`, () => {
-    // test for set method
+      testValues.forEach(([value, expected]) => {
+        const transform = clipper.process(value);
+        assert.equal(transform, expected, `clipper ${JSON.stringify({ params, value, expected })}`);
+      });
+    });
+
     const clipperReused = new Clipper();
 
-    testSetups.forEach( (setup) => {
-      const clipperSetup = setup[0];
+    it(`should properly work with reused instance (${index + 1})`, () => {
+      clipperReused.set(params);
 
-      // test for constructor
-      const clipper = new Clipper(clipperSetup);
-
-      // test for set method
-      clipperReused.set(clipperSetup);
-
-      setup[1].forEach( (testValues) => {
-        const transform = clipper.process(testValues[0]);
-        assert.equal(transform, testValues[1], `clipper ${
-JSON.stringify({ setup: setup[0], value: testValues[0], expected: testValues[1] })
-        }`);
-
-        const transformReused = clipperReused.process(testValues[0]);
-        assert.equal(transformReused, testValues[1], `clipper ${
-JSON.stringify({ setup: setup[0], value: testValues[0], expected: testValues[1] })
-        }`);
-      }); // for each values
-
-    }); // for each setup
-
+      testValues.forEach(([value, expected]) => {
+        const transform = clipperReused.process(value);
+        assert.equal(transform, expected, `clipper ${JSON.stringify({ params, value, expected })}`);
+      });
+    });
   });
-
 });

@@ -7,8 +7,7 @@ import { Hysteresis } from '../src/Hysteresis.js';
 const epsilon = 1e-4; // low-resolution of reference values
 
 describe(`Check Hysteresis object`, () => {
-
-  const testSetups = [
+  [
     [
       {
         sampleRate: 2, // normalised frequency
@@ -47,23 +46,9 @@ describe(`Check Hysteresis object`, () => {
       [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     ],
-  ];
-
-  it(`should validate values`, () => {
-    // test for set method
-    const hysteresisReused = new Hysteresis();
-
-    testSetups.forEach((setup) => {
-      const parameters = setup[0];
-      const testValues = setup[1];
-      const expectedValues = setup[2];
-
-      // test for constructor
+  ].forEach(([parameters, testValues, expectedValues], index) => {
+    it(`should validate values - new instance (${index + 1})`, () => {
       const hysteresis = new Hysteresis(parameters);
-      // test for set method
-      hysteresisReused.set(parameters);
-      // be sure to reset to NOT continue with last test value
-      hysteresisReused.reset();
 
       testValues.forEach((testValue, v) => {
         const transform = hysteresis.process(testValues[v]);
@@ -80,7 +65,16 @@ describe(`Check Hysteresis object`, () => {
             expected: expectedValues[v],
           })}`,
         );
+      });
+    });
 
+    const hysteresisReused = new Hysteresis();
+
+    it(`should validate values - reused instance (${index + 1})`, () => {
+      hysteresisReused.set(parameters);
+      hysteresisReused.reset();
+
+      testValues.forEach((testValue, v) => {
         const transformReused = hysteresisReused.process(testValues[v]);
 
         assertWithRelativeError(
@@ -95,7 +89,8 @@ describe(`Check Hysteresis object`, () => {
             expected: expectedValues[v],
           })}`,
         );
-      }); // for each values
-    }); // for each setup
+      });
+    });
+
   });
 });

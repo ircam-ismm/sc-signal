@@ -54,7 +54,7 @@ class Clipper {
    * @returns {number} The clipped value within the specified range.
    */
   process(inputValue) {
-    return Math.min(this.max, Math.max(this.min, inputValue) );
+    return Math.min(this.max, Math.max(this.min, inputValue));
   }
 }
 export { Clipper };

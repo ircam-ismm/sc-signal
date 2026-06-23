@@ -7,8 +7,7 @@ import { Scaler } from '../src/Scaler.js';
 const epsilon = 1e-7;
 
 describe(`Check Scaler object`, () => {
-
-  const testSetups = [
+  [
     // linear
     [
       {
@@ -176,47 +175,65 @@ describe(`Check Scaler object`, () => {
         [-20, 0.1, -20],
       ],
     ],
-  ];
+  ].forEach(([params, cases], index) => {
+    it(`should validate values - new instance ${index + 1}`, () => {
+      const scaler = new Scaler(params);
 
-  it(`should validate values`, () => {
-    // test for set method
+      cases.forEach(([value, expected]) => {
+        const transform = scaler.process(value);
+
+        assertWithRelativeError(
+          transform,
+          expected,
+          epsilon,
+          `scaler ${JSON.stringify({ params, value, expected })}`,
+        );
+      });
+    });
+
     const scalerReused = new Scaler();
 
-    testSetups.forEach((setup) => {
-      const scalerSetup = setup[0];
-      // test for constructor
-      const scaler = new Scaler(scalerSetup);
-      // test for set method
-      scalerReused.set(scalerSetup);
+    it(`should validate values - reused instance ${index + 1}`, () => {
+      scalerReused.set(params);
+
+      cases.forEach(([value, expected]) => {
+        const transform = scalerReused.process(value);
+
+        assertWithRelativeError(
+          transform,
+          expected,
+          epsilon,
+          `scaler ${JSON.stringify({ params, value, expected })}`,
+        );
+      });
+    });
+
+    it(`should validate values - inverse ${index + 1}`, () => {
+      const scaler = new Scaler(params);
 
       const scalerInverseSetup = {
-        inputStart: setup[0].outputStart,
-        inputEnd: setup[0].outputEnd,
-        outputStart: setup[0].inputStart,
-        outputEnd: setup[0].inputEnd,
-        type: (setup[0].type === 'logarithmic'
+        inputStart: params.outputStart,
+        inputEnd: params.outputEnd,
+        outputStart: params.inputStart,
+        outputEnd: params.inputEnd,
+        type: (params.type === 'logarithmic'
           ? 'exponential'
           : 'logarithmic'),
-        base: setup[0].base,
+        base: params.base,
       };
       const scalerInverse = new Scaler(scalerInverseSetup);
 
-      setup[1].forEach((testValues) => {
-        const transform = scaler.process(testValues[0]);
-        assertWithRelativeError(transform, testValues[1], epsilon,
-          `scaler ${JSON.stringify({ setup: setup[0], value: testValues[0], expected: testValues[1] })}`,
-        );
-
-        const transformReused = scalerReused.process(testValues[0]);
-        assertWithRelativeError(transformReused, testValues[1], epsilon,
-          `scaler ${JSON.stringify({ setup: setup[0], value: testValues[0], expected: testValues[1] })}`,
-        );
-
+      cases.forEach(([value, _, expected]) => {
+        const transform = scaler.process(value);
         const transformInverse = scalerInverse.process(transform);
-        assertWithRelativeError(transformInverse, testValues[2], epsilon,
-          `inverse scaler ${JSON.stringify({ setup: scalerInverseSetup, value: transform, expected: testValues[2] })}`,
+
+        assertWithRelativeError(
+          transformInverse,
+          expected,
+          epsilon,
+          `inverse scaler ${JSON.stringify({ params, value: transform, expected })}`,
         );
-      }); // for each values
-    }); // for each setup
+      });
+    });
   });
 });

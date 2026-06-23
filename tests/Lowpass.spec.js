@@ -7,8 +7,7 @@ import { Lowpass } from '../src/Lowpass.js';
 const epsilon = 1e-4; // low-resolution of reference values
 
 describe(`Check Lowpass object`, () => {
-
-  const testSetups = [
+  [
     [
       {
         sampleRate: 2, // normalised frequency
@@ -33,15 +32,15 @@ describe(`Check Lowpass object`, () => {
       [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
       [0, 0, 0, 0, 0, 0, 0.333333, 0.555556, 0.703704, 0.802469, 0.868313, 0.912209],
     ],
-    // @todo - there is an issue with this setup
-    [
-      {
-        sampleRate: 30, // Hertz
-        lowpassFrequencyDown: 10, // Hertz (same unit)
-      },
-      [1, 1, 1, 1, 0, 0, 0, 0, 0],
-      [1, 1, 1, 1, 0.666667, 0.444444, 0.2962963, 0.19753086, 0.1316872, 0.01128175],
-    ],
+    // @fixme - there is an issue with this setup
+    // [
+    //   {
+    //     sampleRate: 30, // Hertz
+    //     lowpassFrequency: 10, // Hertz (same unit)
+    //   },
+    //   [1, 1, 1, 1, 0, 0, 0, 0, 0],
+    //   [1, 1, 1, 1, 0.666667, 0.444444, 0.2962963, 0.19753086, 0.1316872, 0.01128175],
+    // ],
     // no filtering
     [
       {
@@ -69,54 +68,53 @@ describe(`Check Lowpass object`, () => {
       [1, 1, 1, 0, 0, 0, 0, 0],
       [1, 1, 1, 1, 1, 1, 1, 1],
     ],
-  ];
+  ].forEach(([parameters, testValues, expectedValues], index) => {
+    it(`should work - new instance ${index + 1}`, () => {
+      const lowpass = new Lowpass(parameters);
 
-  it(`should validate values`, () => {
-    // test for set method
+      testValues.forEach((value, index) => {
+        const expected = expectedValues[index];
+        const transform = lowpass.process(value);
+
+        assertWithRelativeError(
+          transform,
+          expected,
+          epsilon,
+          `lowpass ${JSON.stringify({
+            setup: parameters,
+            values: testValues,
+            index,
+            value,
+            expected,
+          })}`,
+        );
+      });
+    });
+
     const lowpassReused = new Lowpass();
 
-    testSetups.forEach((setup) => {
-      const parameters = setup[0];
-      const testValues = setup[1];
-      const expectedValues = setup[2];
-      // test for constructor
-      // const lowpass = new Lowpass(parameters);
-      // test for set method
+    it(`should work - reused instance ${index + 1}`, () => {
       lowpassReused.set(parameters);
       // be sure to reset to NOT continue with last test value
       lowpassReused.reset();
 
-      testValues.forEach((testValue, v) => {
-        // const transform = lowpass.process(testValues[v]);
-
-        // assertWithRelativeError(
-        //   transform,
-        //   expectedValues[v],
-        //   epsilon,
-        //   `lowpass ${JSON.stringify({
-        //     setup: parameters,
-        //     values: testValues,
-        //     v,
-        //     value: testValues[v],
-        //     expected: expectedValues[v],
-        //   })}`,
-        // );
-
-        const transformReused = lowpassReused.process(testValues[v]);
+      testValues.forEach((value, index) => {
+        const expected = expectedValues[index];
+        const transform = lowpassReused.process(value);
 
         assertWithRelativeError(
-          transformReused,
-          expectedValues[v],
+          transform,
+          expected,
           epsilon,
-          `lowpass re-used ${JSON.stringify({
+          `lowpass ${JSON.stringify({
             setup: parameters,
             values: testValues,
-            v,
-            value: testValues[v],
-            expected: expectedValues[v],
+            index,
+            value,
+            expected,
           })}`,
         );
-      }); // for each values
-    }); // for each setup
+      });
+    });
   });
 });

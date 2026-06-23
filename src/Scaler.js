@@ -54,7 +54,7 @@ class Scaler {
 
   /**
    * Create a new Scaler instance.
-   * 
+   *
    * @param {Object} [options] - The options object.
    * @param {number} [options.inputStart=0] - The start value of the input range.
    * @param {number} [options.inputEnd=1] - The end value of the input range.
@@ -129,7 +129,7 @@ class Scaler {
     }
 
     const input = (this.clip
-      ? Math.max(this.inputMin, Math.min(this.inputMax, inputValue) )
+      ? Math.max(this.inputMin, Math.min(this.inputMax, inputValue))
       : inputValue);
 
     if (this.base === 1 || this.type === 'linear') {
