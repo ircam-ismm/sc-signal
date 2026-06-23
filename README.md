@@ -102,7 +102,7 @@ const hysteresis = new Hysteresis({
 
 hysteresis.process(0); // 0
 hysteresis.process(1); // 0.9
-hyteresis.process(1); // 0.99
+hysteresis.process(1); // 0.99
 hysteresis.process(1); // 0.999
 hysteresis.process(1); // 0.9999
 hysteresis.process(1); // 0.99999
