@@ -1,6 +1,9 @@
 .babelrc
 .editorconfig
 .editorbackup
+.github
+
+eslint.config.js
 TODO.md
 
 docs
