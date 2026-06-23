@@ -16,9 +16,13 @@ export class CategoricalHysteresis {
     this.set({ bufferSize });
   }
 
-  set({
-    bufferSize,
-  } = {}) {
+  set(attributes) {
+    if (!('bufferSize' in attributes)) {
+      return;
+    }
+
+    const { bufferSize } = attributes;
+
     if (
       !Number.isFinite(bufferSize)
       || Math.floor(bufferSize) !== bufferSize
