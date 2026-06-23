@@ -71,16 +71,13 @@ describe(`Check Clipper object`, () => {
       setup[1].forEach( (testValues) => {
         const transform = clipper.process(testValues[0]);
         assert.equal(transform, testValues[1], `clipper ${
-          // eslint-disable-next-line indent
 JSON.stringify({ setup: setup[0], value: testValues[0], expected: testValues[1] })
         }`);
 
         const transformReused = clipperReused.process(testValues[0]);
         assert.equal(transformReused, testValues[1], `clipper ${
-          // eslint-disable-next-line indent
 JSON.stringify({ setup: setup[0], value: testValues[0], expected: testValues[1] })
         }`);
-
       }); // for each values
 
     }); // for each setup

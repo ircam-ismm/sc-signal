@@ -2,13 +2,13 @@ import { hertzToNormalised } from '@ircam/sc-utils';
 
 /**
  * Represents a Lowpass filter.
- * 
+ *
  * @example
  * const lowpass = new Lowpass({
  * sampleRate: 2, // normalised frequency
  * lowpassFrequency: 0.9,
  * });
- * 
+ *
  * lowpass.process(0); // 0
  * lowpass.process(1); // 0.9
  * lowpass.process(1); // 0.99
@@ -21,7 +21,7 @@ class Lowpass {
 
   /**
    * Creates a new instance of the Lowpass filter.
-   * 
+   *
    * @param {Object} [options] - The options object.
    * @param {number} [options.sampleRate=2] - The sample rate in Hertz or 2 for normalized frequency.
    * @param {number} [options.lowpassFrequency=0.5] - The lowpass frequency in Hertz if sampleRate is defined, or normalized frequency.

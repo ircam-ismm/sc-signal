@@ -3,7 +3,7 @@ import { assert } from 'chai';
 
 import { CategoricalHysteresis } from '../src/CategoricalHysteresis.js';
 
-describe.only('# CategoricalHysteresis', () => {
+describe('# CategoricalHysteresis', () => {
   [
     [
       {},
@@ -21,7 +21,7 @@ describe.only('# CategoricalHysteresis', () => {
         ['b', 'a'], // 5a / 5b -> favor lastValue
         ['b', 'b'], // 4a / 6b
         ['b', 'b'],
-      ]
+      ],
     ],
     [
       { bufferSize: 2 },
@@ -35,7 +35,7 @@ describe.only('# CategoricalHysteresis', () => {
         ['a', 'a'],
         ['b', 'a'],
         ['b', 'b'],
-      ]
+      ],
     ],
     [
       { bufferSize: 4 },
@@ -48,15 +48,28 @@ describe.only('# CategoricalHysteresis', () => {
         ['b', 'b'],
         ['c', 'b'],
         ['c', 'c'],
-      ]
+      ],
     ],
   ].forEach(([params, testValues], index) => {
-    it(`should properly work (${index + 1})`, () => {
+    it(`should properly work with new instance (${index + 1})`, () => {
       const hysteresis = new CategoricalHysteresis(params);
+      hysteresisReused.set(params);
 
       testValues.forEach(([input, expected], index) => {
         const result = hysteresis.process(input);
-        assert.equal(result, expected, `Failed at index ${index}`);
+        assert.equal(result, expected, `Failed new at index ${index}`);
+      });
+    });
+
+    const hysteresisReused = new CategoricalHysteresis();
+
+    it(`should properly work with reused instance (${index + 1})`, () => {
+      const hysteresis = new CategoricalHysteresis(params);
+      hysteresisReused.set(params);
+
+      testValues.forEach(([input, expected], index) => {
+        const resultReused = hysteresisReused.process(input);
+        assert.equal(resultReused, expected, `Failed reused at index ${index}`);
       });
     });
   });

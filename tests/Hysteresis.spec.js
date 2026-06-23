@@ -54,52 +54,48 @@ describe(`Check Hysteresis object`, () => {
     const hysteresisReused = new Hysteresis();
 
     testSetups.forEach((setup) => {
-
       const parameters = setup[0];
       const testValues = setup[1];
       const expectedValues = setup[2];
 
-
-      // // test for constructor
-      // const hysteresis = new Hysteresis(parameters);
-
+      // test for constructor
+      const hysteresis = new Hysteresis(parameters);
       // test for set method
       hysteresisReused.set(parameters);
       // be sure to reset to NOT continue with last test value
       hysteresisReused.reset();
 
       testValues.forEach((testValue, v) => {
-        //         const transform = hysteresis.process(testValues[v]);
-        //         assertWithRelativeError(transform, expectedValues[v], epsilon,
-        //                                 `hysteresis ${
-        // JSON.stringify({
-        //   setup: parameters,
-        //   values: testValues,
-        //   v,
-        //   value: testValues[v],
-        //   expected: expectedValues[v],
-        // })
-        //       }`);
+        const transform = hysteresis.process(testValues[v]);
 
-        const transformReused = hysteresisReused.process(testValues[v]);
-        assertWithRelativeError(transformReused, expectedValues[v], epsilon,
-          `hysteresis re-used ${
-          /* eslint-disable indent */
-          JSON.stringify({
+        assertWithRelativeError(
+          transform,
+          expectedValues[v],
+          epsilon,
+          `hysteresis ${JSON.stringify({
             setup: parameters,
             values: testValues,
             v,
             value: testValues[v],
             expected: expectedValues[v],
-          })
-          }`);
-        /* eslint-enable indent */
+          })}`,
+        );
 
+        const transformReused = hysteresisReused.process(testValues[v]);
 
+        assertWithRelativeError(
+          transformReused,
+          expectedValues[v],
+          epsilon,
+          `hysteresis re-used ${JSON.stringify({
+            setup: parameters,
+            values: testValues,
+            v,
+            value: testValues[v],
+            expected: expectedValues[v],
+          })}`,
+        );
       }); // for each values
-
     }); // for each setup
-
   });
-
 });

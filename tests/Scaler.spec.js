@@ -184,10 +184,8 @@ describe(`Check Scaler object`, () => {
 
     testSetups.forEach((setup) => {
       const scalerSetup = setup[0];
-
       // test for constructor
       const scaler = new Scaler(scalerSetup);
-
       // test for set method
       scalerReused.set(scalerSetup);
 
@@ -206,34 +204,19 @@ describe(`Check Scaler object`, () => {
       setup[1].forEach((testValues) => {
         const transform = scaler.process(testValues[0]);
         assertWithRelativeError(transform, testValues[1], epsilon,
-          `scaler ${
-          /* eslint-disable indent */
-          JSON.stringify({ setup: setup[0], value: testValues[0], expected: testValues[1] })
-          }`);
-        /* eslint-enable indent */
-
+          `scaler ${JSON.stringify({ setup: setup[0], value: testValues[0], expected: testValues[1] })}`,
+        );
 
         const transformReused = scalerReused.process(testValues[0]);
         assertWithRelativeError(transformReused, testValues[1], epsilon,
-          `scaler ${
-          /* eslint-disable indent */
-          JSON.stringify({ setup: setup[0], value: testValues[0], expected: testValues[1] })
-          }`);
-        /* eslint-enable indent */
+          `scaler ${JSON.stringify({ setup: setup[0], value: testValues[0], expected: testValues[1] })}`,
+        );
 
         const transformInverse = scalerInverse.process(transform);
         assertWithRelativeError(transformInverse, testValues[2], epsilon,
-          `inverse scaler ${
-          /* eslint-disable indent */
-          JSON.stringify({ setup: scalerInverseSetup, value: transform, expected: testValues[2] })
-          }`);
-        /* eslint-enable indent */
-
-
+          `inverse scaler ${JSON.stringify({ setup: scalerInverseSetup, value: transform, expected: testValues[2] })}`,
+        );
       }); // for each values
-
     }); // for each setup
-
   });
-
 });

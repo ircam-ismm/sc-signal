@@ -33,6 +33,7 @@ describe(`Check Lowpass object`, () => {
       [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
       [0, 0, 0, 0, 0, 0, 0.333333, 0.555556, 0.703704, 0.802469, 0.868313, 0.912209],
     ],
+    // @todo - there is an issue with this setup
     [
       {
         sampleRate: 30, // Hertz
@@ -75,53 +76,47 @@ describe(`Check Lowpass object`, () => {
     const lowpassReused = new Lowpass();
 
     testSetups.forEach((setup) => {
-
       const parameters = setup[0];
       const testValues = setup[1];
       const expectedValues = setup[2];
-
-
-      // // test for constructor
-      // const lowpass = new Lowpass(parameters);
-
+      // test for constructor
+      const lowpass = new Lowpass(parameters);
       // test for set method
       lowpassReused.set(parameters);
       // be sure to reset to NOT continue with last test value
       lowpassReused.reset();
 
       testValues.forEach((testValue, v) => {
-        //         const transform = lowpass.process(testValues[v]);
-        //         assertWithRelativeError(transform, expectedValues[v], epsilon,
-        //                                 `lowpass ${
-        // JSON.stringify({
-        //   setup: parameters,
-        //   values: testValues,
-        //   v,
-        //   value: testValues[v],
-        //   expected: expectedValues[v],
-        // })
-        //       }`);
+        // const transform = lowpass.process(testValues[v]);
+
+        // assertWithRelativeError(
+        //   transform,
+        //   expectedValues[v],
+        //   epsilon,
+        //   `lowpass ${JSON.stringify({
+        //     setup: parameters,
+        //     values: testValues,
+        //     v,
+        //     value: testValues[v],
+        //     expected: expectedValues[v],
+        //   })}`,
+        // );
 
         const transformReused = lowpassReused.process(testValues[v]);
-        assertWithRelativeError(transformReused, expectedValues[v], epsilon,
-          `lowpass re-used ${
-          /* eslint-disable indent */
-          JSON.stringify({
+
+        assertWithRelativeError(
+          transformReused,
+          expectedValues[v],
+          epsilon,
+          `lowpass re-used ${JSON.stringify({
             setup: parameters,
             values: testValues,
             v,
             value: testValues[v],
             expected: expectedValues[v],
-          })
-          }`);
-        /* eslint-enable indent */
-
-
-
+          })}`,
+        );
       }); // for each values
-
     }); // for each setup
-
   });
-
 });
