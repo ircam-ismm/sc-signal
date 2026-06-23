@@ -53,7 +53,6 @@ describe('# CategoricalHysteresis', () => {
   ].forEach(([params, testValues], index) => {
     it(`should properly work with new instance (${index + 1})`, () => {
       const hysteresis = new CategoricalHysteresis(params);
-      hysteresisReused.set(params);
 
       testValues.forEach(([input, expected], index) => {
         const result = hysteresis.process(input);
@@ -64,7 +63,6 @@ describe('# CategoricalHysteresis', () => {
     const hysteresisReused = new CategoricalHysteresis();
 
     it(`should properly work with reused instance (${index + 1})`, () => {
-      const hysteresis = new CategoricalHysteresis(params);
       hysteresisReused.set(params);
 
       testValues.forEach(([input, expected], index) => {

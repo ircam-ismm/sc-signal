@@ -80,7 +80,7 @@ describe(`Check Lowpass object`, () => {
       const testValues = setup[1];
       const expectedValues = setup[2];
       // test for constructor
-      const lowpass = new Lowpass(parameters);
+      // const lowpass = new Lowpass(parameters);
       // test for set method
       lowpassReused.set(parameters);
       // be sure to reset to NOT continue with last test value
